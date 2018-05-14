@@ -89,9 +89,9 @@ int main(int argc, char ** argv){
   float *h_B = (float *)malloc(max_m_k_n * max_m_k_n * sizeof(float));
   float *h_C = (float *)malloc(max_m_k_n * max_m_k_n * sizeof(float));
   
-  CPU_fill_rand(h_A, max_m_k_n, max_m_k_n);
-  CPU_fill_rand(h_B, max_m_k_n, max_m_k_n);
-  CPU_fill_rand(h_C, max_m_k_n, max_m_k_n);
+  //CPU_fill_rand(h_A, max_m_k_n, max_m_k_n);
+  //CPU_fill_rand(h_B, max_m_k_n, max_m_k_n);
+  //CPU_fill_rand(h_C, max_m_k_n, max_m_k_n);
 
     // Allocate 3 arrays on GPU
     float *d_A, *d_B, *d_C;
@@ -128,12 +128,10 @@ int main(int argc, char ** argv){
     for(int rep = 0; rep < repeats; rep++){
 
         stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
-
-        cudaEventSynchronize(stop);
     }
 
     cudaEventRecord(stop,0);
-
+    cudaEventSynchronize(stop);
 
     float elapsed;
     cudaEventElapsedTime(&elapsed, start, stop);
