@@ -62,10 +62,10 @@ int main(int argc, char ** argv){
     checkCuda(cudaMemcpy(d_C,h_C,max_m_k_n * max_m_k_n * sizeof(int8_t),cudaMemcpyHostToDevice));
     
     int lda, ldb, ldc, m, n, k;
-    const int8_t alf = 1.0f;
-    const int8_t bet = 0.0f;
-    const int8_t *alpha = &alf;
-    const int8_t *beta = &bet;
+    const int alf = 1.0f;
+    const int bet = 0.0f;
+    const int *alpha = &alf;
+    const int *beta = &bet;
   
 
   
@@ -85,7 +85,14 @@ int main(int argc, char ** argv){
 
     for(int rep = 0; rep < repeats; rep++){
 
-        stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
+        stat = cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_N, 
+                            m, n, k, 
+                            alpha, 
+                            d_A, CUDA_R_8I, lda, 
+                            d_B, CUDA_R_8I, ldb, 
+                            beta, 
+                            d_C, CUDA_R_32I, ldc,
+                            CUDA_R_32I, CUBLAS_GEMM_DFALT);
     }
 
     cudaEventRecord(stop,0);
