@@ -20,7 +20,7 @@ using namespace std;
 int main(int argc, char ** argv){
 
 
-  int min_m_k_n = 2;
+  int min_m_k_n = 16;
   int max_m_k_n = 4096*8;
   int repeats = 10;
   int verbose = 1;
@@ -93,6 +93,9 @@ int main(int argc, char ** argv){
                             beta, 
                             d_C, CUDA_R_32I, ldc,
                             CUDA_R_32I, CUBLAS_GEMM_DFALT);
+    
+    assert(!cudaGetLastError());
+
     }
 
     cudaEventRecord(stop,0);
@@ -107,7 +110,7 @@ int main(int argc, char ** argv){
       exit(1);
     }
 
-    assert(!cudaGetLastError());
+//    assert(!cudaGetLastError());
 
     cout << "int8_t; size "
 

@@ -21,7 +21,7 @@ using namespace std;
 int main(int argc, char ** argv){
 
 
-  int min_m_k_n = 2;
+  int min_m_k_n = 16;
   int max_m_k_n = 4096*8;
   int repeats = 10;
   int verbose = 1;
@@ -63,10 +63,10 @@ int main(int argc, char ** argv){
     checkCuda(cudaMemcpy(d_C,h_C,max_m_k_n * max_m_k_n * sizeof(int8_t),cudaMemcpyHostToDevice));
     
     int lda, ldb, ldc, m, n, k;
-    const int8_t alf = 1.0f;
-    const int8_t bet = 0.0f;
-    const int8_t *alpha = &alf;
-    const int8_t *beta = &bet;
+    int alf = 1;
+    int bet = 0;
+    int *alpha = &alf;
+    int *beta = &bet;
   
 
   
@@ -94,7 +94,9 @@ int main(int argc, char ** argv){
                             beta, 
                             d_C, CUDA_R_32I, ldc,
                             CUDA_R_32I, CUBLAS_GEMM_DFALT);
-         //stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
+          
+          checkCublas(stat);
+          assert(!cudaGetLastError());
     }
 
     cudaEventRecord(stop,0);
@@ -109,7 +111,7 @@ int main(int argc, char ** argv){
       exit(1);
     }
 
-    assert(!cudaGetLastError());
+    //assert(!cudaGetLastError());
 
     cout << "int8_t; size "
 
