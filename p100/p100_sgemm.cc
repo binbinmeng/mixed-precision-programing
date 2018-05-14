@@ -116,33 +116,39 @@ int main(int argc, char ** argv){
   cudaEventCreate(&stop);
 
   for(int size = min_m_k_n; size <= max_m_k_n; size=size*2){
-    double sum = 0.0;
+
+    m=n=k=size;
+    lda = m;
+    ldb = k;
+    ldc = m;
+    
+    cudaEventRecord(start, 0);
+
+
     for(int rep = 0; rep < repeats; rep++){
-      cudaEventRecord(start, 0);
-	  m=n=k=size;
-	  lda = m;
-	  ldb = k;
-	  ldc = m;
 
-        stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc); 
+        stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
 
-      cudaEventRecord(stop,0);
-      cudaEventSynchronize(stop);
-      if(stat != CUBLAS_STATUS_SUCCESS){
-	cerr << "cublasSgemmBatched failed" << endl;
-	exit(1);
-      }
-      assert(!cudaGetLastError());
-      
-      float elapsed;
-      cudaEventElapsedTime(&elapsed, start, stop);
-      elapsed /= 1000.0f;
-      sum += elapsed;
+        cudaEventSynchronize(stop);
     }
 
-  cout << "float32; size " 
+    cudaEventRecord(stop,0);
 
-  << size << " average: " << sum/repeats << " s "<< endl;
+
+    float elapsed;
+    cudaEventElapsedTime(&elapsed, start, stop);
+    elapsed /= 1000.0f;
+
+    if(stat != CUBLAS_STATUS_SUCCESS){
+      cerr << "cublasSgemmBatched failed" << endl;
+      exit(1);
+    }
+
+    assert(!cudaGetLastError());
+
+    cout << "float32; size "
+
+         << size << " average: " << elapsed/repeats << " s "<< endl;
 
   }
 
