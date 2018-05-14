@@ -2,10 +2,6 @@
 // Created by binbin on 18-5-14.
 //
 
-//
-// Created by binbin on 18-5-14.
-//
-
 #include <unistd.h>
 #include <iostream>
 #include <stdlib.h>
