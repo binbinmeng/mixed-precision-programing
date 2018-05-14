@@ -5,7 +5,7 @@ foreach(source ${srcs})
     get_filename_component(name ${source} NAME_WE)
 
     # target
-    add_executable(${name} ${source})
+    add_executable(${name} ${source} ../util/util.h)
     target_link_libraries(${name} ${CUDA_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES})
 
     # Install
