@@ -13,5 +13,5 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_52,code=sm_52,arch=compute_60,
 
 add_subdirectory(p100)
 add_subdirectory(v100)
-#add_subdirectory(p4&p40)
+add_subdirectory(p4)
 
