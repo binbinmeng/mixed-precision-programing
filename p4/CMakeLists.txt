@@ -7,7 +7,7 @@ foreach(source ${srcs})
 
     # target
     add_executable(${name} ${source} ../util/util.h)
-    target_link_libraries(${name} ${CUDA_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES})
+    target_link_libraries(${name} ${CUDA_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES} cudnn)
 
     # Install
     install(TARGETS ${name} DESTINATION test)
