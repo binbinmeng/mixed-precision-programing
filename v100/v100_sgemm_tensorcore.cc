@@ -1,4 +1,4 @@
-//
+
 // Created by binbin on 18-5-14.
 //
 
@@ -34,7 +34,7 @@ int main(int argc, char ** argv){
   cublasHandle_t handle;
 
   checkCublas(cublasCreate(&handle));
-
+  checkCublas( cublasSetMathMode(handle,CUBLAS_TENSOR_OP_MATH));
   if(verbose) cout << "allocating device variables" << endl;
   
   // Allocate 3 arrays on CPU
@@ -81,7 +81,16 @@ int main(int argc, char ** argv){
 
     for(int rep = 0; rep < repeats; rep++){
 
-        stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
+        //stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
+        stat = cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_N,
+                        m, n, k,
+                        alpha,
+                        d_A, CUDA_R_32F, m,//MATRIX_M,
+                        d_B, CUDA_R_32F, k,//MATRIX_K,
+                        beta,
+                        d_C, CUDA_R_32F, m,//MATRIX_M,
+                        CUDA_R_32F, CUBLAS_GEMM_DFALT_TENSOR_OP);
+
     }
 
     cudaEventRecord(stop,0);

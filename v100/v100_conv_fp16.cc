@@ -147,9 +147,13 @@ struct TrainingContext {
                                           CUDNN_TENSOR_NCHW_VECT_C,
                                           conv.out_channels,
                                           conv.in_channels,
-                                          conv.kernel_size,
-                                          conv.kernel_size));
+                                          //conv.kernel_size,
+                                          //conv.kernel_size));
+                                          3,//conv.kernel_size,
+                                          3));//conv.kernel_size));
 
+    //checkCUDNN(cudnnSetConvolutionMathType(convDesc, CUDNN_TENSOR_OP_MATH));
+     
     // Set convolution operator. Folowing the manual, chagnged
     // * CUDNN_DATA_FLOAT -> CUDNN_DATA_INT32
     int pad_height = 0;
@@ -242,13 +246,13 @@ int main(int argc,char *argv[ ]) {
   int iterations = 100;
 
   // input dimensions
-  size_t width = 1280;
-  size_t height = 720;
-  size_t channels = 64;
-  int batch_size = 4;
+  size_t width = 2048;//1280;
+  size_t height = 40;//720;
+  size_t channels = 24;//64;
+  int batch_size = 8;//4;
 
   // Create layer architecture
-  int out_channels = 4*4;
+  int out_channels = 256;//4*4;
   int kernel_size = 1;
   
   std::cout<<"width = "<< width<<","

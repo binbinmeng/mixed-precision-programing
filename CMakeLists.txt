@@ -13,6 +13,6 @@ LIST(APPEND CUDA_NVCC_FLAGS --compiler-options -fno-strict-aliasing -lineinfo -u
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_52,code=sm_52,arch=compute_60,code=sm_60,arch=compute_61,code=sm_61,arch=compute_70,code=sm_70)
 
 add_subdirectory(p100)
-#add_subdirectory(v100)
+add_subdirectory(v100)
 add_subdirectory(p4)
 
