@@ -19,7 +19,7 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 //#include "fp16_conversion.h"
-
+#include <cuda_fp16.h>
 /** Error handling from https://developer.nvidia.com/cuDNN */
 #define FatalError(s)                                                          \
   do {                                                                         \
@@ -264,18 +264,18 @@ int main(int argc,char *argv[ ]) {
 
   // Initizlie convolution weight
   std::mt19937 g(42);
-  __half wconv1 =
+  float wconv1 =
       sqrt(3.0f / (conv1.kernel_size * conv1.kernel_size * conv1.in_channels));
   std::uniform_real_distribution<> dconv1(-wconv1, wconv1);
-  for (auto&& iter : conv1.pconv) {
-    iter = static_cast<__half>(dconv1(g));
-  }
+  /*for (auto&& iter : conv1.pconv) {
+    iter = static_cast<float>(dconv1(g));
+  }*/
 
   // Initailize input image (batch size = 1)
   std::vector<__half> img___half(1 * width * height * channels);
-  for (auto&& iter : img___half) {
-    iter = static_cast<__half>(dconv1(g));
-  }
+  /*for (auto&& iter : img___half) {
+    iter = static_cast<float>(dconv1(g));
+  }*/
 
   // Allocate input and output on GPU; copy input over to GPU
   __half* d_data, *d_conv1;
